@@ -16,6 +16,7 @@ except:
     print("COM Port nicht erreichbar, du Nugget!")
     exit()
 
+
 if conf[5].strip() == "\r":
     new_line = "\r"
 elif conf[5].strip() == "\n":
@@ -30,6 +31,8 @@ print("starte Terminal")
 user_key = ""
 user_str = ""
 serial_line = ""
+buf = ""
+
 
 #super loop
 while True:
