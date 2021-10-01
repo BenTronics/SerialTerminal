@@ -1,0 +1,6 @@
+COM Port
+4
+Baudrate
+115200
+Terminierung
+\r
