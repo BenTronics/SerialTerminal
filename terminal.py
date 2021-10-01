@@ -1,6 +1,12 @@
+from serial import Serial
+import msvcrt
+
 #config.txt einlesen
+conf_handler = open("config.txt", "r")
+conf = conf_handler.readlines()
 
 #com port öffnen
+
 
 #super loop
 
