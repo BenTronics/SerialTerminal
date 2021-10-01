@@ -7,7 +7,7 @@ conf = conf_handler.readlines()
 
 #com port öffnen
 com = Serial()
-com.timeout = 0.2
+com.timeout = 0.1
 com.port = "COM" + str(conf[1].strip())
 com.baudrate = int(conf[3].strip())
 try:
@@ -39,14 +39,15 @@ while True:
         if serial_line != "":
             print(serial_line)
     #wenn benutzer taste gedrückt blockieren bis enter dann printen
+    
     if msvcrt.kbhit():
-        user_key = msvcrt.getch().decode()
-        if user_key == "\r":
-            com.write((user_str + new_line).encode())
-            print("User> " + user_str)
-            user_key = ""
-            #wenn "-q" einegeben com port schließen
-            if user_str == "-q":
-                break
-            user_str = ""
+        user_key = msvcrt.getche().decode()
         user_str += user_key
+        if user_key == "\r":
+            #wenn "-q" einegeben com port schließen
+            if user_str.strip() == "-q":
+                print("beende das programm")
+                exit()
+            com.write((user_str + new_line).encode())
+            print("User> " + user_str.replace("\r", "").replace("\n", ""))
+            user_str = ""
