@@ -1,9 +1,12 @@
 import terminal
 from cmd_history import CMD_History
+from serial_handler import Serial
 
 cmd_hist = CMD_History(30)
+serial = Serial()
 user_char = ""
 user_str = ""
+serial_str = ""
 
 while True:
     if terminal.char_in_buf():
@@ -17,6 +20,7 @@ while True:
         # enter
         elif user_char == "<enter>":
             print("")
+            serial.test_write(user_str)
             cmd_hist.add_item(user_str)
             user_str = ""
         # arrow up
@@ -38,3 +42,10 @@ while True:
             print("\b " * len(user_str), end="")
             print("\r" + user_str, end="", flush=True)
         user_char = ""
+
+    if serial.test_inWaiting():
+        serial_str = serial.test_readline()
+        print("\b \b"*len(user_str), end="\r", flush=True)
+        print(serial_str)
+        print(user_str, end="", flush=True)
+        
