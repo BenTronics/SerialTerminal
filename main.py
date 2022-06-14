@@ -35,7 +35,7 @@ while True:
             user_str = cmd_hist.read_forward()
             print(user_str, end="", flush=True)
         # unwanted keys
-        elif user_char == "<arrow-left>" or user_char == "<arrow-right>" or user_char == "<tab>":
+        elif user_char == "<arrow-left>" or user_char == "<arrow-right>" or user_char == "<tab>" or user_char == "<none>":
             pass
         # regular char
         else:
@@ -43,12 +43,12 @@ while True:
             print("\b " * len(user_str), end="")
             print("\r" + user_str, end="", flush=True)
         user_char = ""
-    """
+    
     if serial.test_inWaiting():
         serial_str = serial.test_readline()
         print("\b \b"*len(user_str), end="\r", flush=True)
         print(serial_str)
         print("\r" + user_str, end="", flush=True)
-    """
+    
     
         
