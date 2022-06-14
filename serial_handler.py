@@ -30,7 +30,7 @@ class Serial(serial.Serial):
     
     #------- Test driver -------
     def test_inWaiting(self):
-        if randint(0, 1000000000) % 20000 == 0:
+        if randint(0, 1000000000) % 2000000 == 0:
             return True
         else:
             return False

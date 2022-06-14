@@ -22,6 +22,7 @@ while True:
             print("")
             serial.test_write(user_str)
             cmd_hist.add_item(user_str)
+            print("\r",end="", flush=True)
             user_str = ""
         # arrow up
         elif user_char == "<arrow-up>":
@@ -42,10 +43,12 @@ while True:
             print("\b " * len(user_str), end="")
             print("\r" + user_str, end="", flush=True)
         user_char = ""
-
+    """
     if serial.test_inWaiting():
         serial_str = serial.test_readline()
         print("\b \b"*len(user_str), end="\r", flush=True)
         print(serial_str)
-        print(user_str, end="", flush=True)
+        print("\r" + user_str, end="", flush=True)
+    """
+    
         
