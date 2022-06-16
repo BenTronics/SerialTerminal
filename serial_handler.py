@@ -4,6 +4,7 @@ import serial.tools.list_ports
 from random import randint
 import logging
 logging.basicConfig(filename="serial.log", filemode="w", level=logging.DEBUG, format="[{levelname}] {message}", style="{")
+logger = logging.getLogger(__name__)
 #---------------------------
 
 class Serial(serial.Serial):
@@ -37,12 +38,12 @@ class Serial(serial.Serial):
     
     def test_readline(self):
         data = self.test_data[self.test_ptr]
-        logging.debug("Rx>" + data)
+        logger.debug("Rx>" + data)
         self.test_ptr += 1
         if self.test_ptr >= len(self.test_data):
             self.test_ptr = 0
         return data
 
     def test_write(self, line):
-        logging.debug("Tx>" + ((line + self.new_line_char).replace("\r", "\\r")).replace("\n", "\\n"))
+        logger.debug("Tx>" + ((line + self.new_line_char).replace("\r", "\\r")).replace("\n", "\\n"))
     #---------------------------
