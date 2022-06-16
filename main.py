@@ -42,17 +42,20 @@ while True:
             serial.test_write(user_str)
             cmd_hist.add_item(user_str)
             print("\r",end="", flush=True)
+            curser_pos = 0
             user_str = ""
         # arrow up
         elif user_char == "<arrow-up>":
             print("\b \b"*len(user_str), end="\r", flush=True)
             user_str = cmd_hist.read_backward()
             print(user_str, end="", flush=True)
+            curser_pos = len(user_str)
         # arrow down
         elif user_char == "<arrow-down>":
             print("\b \b"*len(user_str), end="\r", flush=True)
             user_str = cmd_hist.read_forward()
             print(user_str, end="", flush=True)
+            curser_pos = len(user_str)
         # arrow left
         elif user_char == "<arrow-left>":
             curser_pos -= 1
