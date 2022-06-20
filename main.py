@@ -3,6 +3,7 @@ from cmd_history import CMD_History
 from serial_handler import Serial
 from colored_string import colorize_str
 import os
+from time_stamp import get_time_stamp
 
 import logging
 logging.basicConfig(filename="curser.log", filemode="w", level=logging.DEBUG, format="[{levelname}] {message}", style="{")
@@ -46,10 +47,13 @@ while True:
                 user_char = ""
         # enter
         elif user_char == "<enter>":
-            print("")
+            print("\b \b"*len(user_str), end="\r", flush=True)
+            print(get_time_stamp() + "\t" + colorize_str(user_str, str_color))
             serial.test_write(user_str)
             cmd_hist.add_item(user_str)
             print("\r",end="", flush=True)
+            if user_str == "-q":
+                exit()
             curser_pos = 0
             user_str = ""
         # arrow up
@@ -104,7 +108,7 @@ while True:
     if serial.test_inWaiting():
         serial_str = serial.test_readline()
         print("\b \b"*len(user_str), end="\r", flush=True)
-        print(serial_str.replace("\r", colorize_str("\\r", "gray")).replace("\n", colorize_str("\\n", "gray")))
+        print(get_time_stamp() + "\t" + serial_str.replace("\r", colorize_str("\\r", "gray")).replace("\n", colorize_str("\\n", "gray")))
         print("\r" + colorize_str(user_str, str_color), end="", flush=True)
     
     
