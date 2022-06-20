@@ -1,6 +1,8 @@
 import terminal
 from cmd_history import CMD_History
 from serial_handler import Serial
+from colored_string import colorize_str
+import os
 
 import logging
 logging.basicConfig(filename="curser.log", filemode="w", level=logging.DEBUG, format="[{levelname}] {message}", style="{")
@@ -12,6 +14,12 @@ user_char = ""
 user_str = ""
 serial_str = ""
 curser_pos = 0
+str_color = "cyan"
+
+if os.name == "nt":
+    os.system("cls")
+else:
+    os.system("clear")
 
 def delete_char(string, pos):
     return string[:pos] + string[pos+1:]
@@ -30,7 +38,7 @@ while True:
                 print("\r" + " "*len(user_str), end="", flush=True)
                 user_str = delete_char(user_str, curser_pos-1)
                 logger.debug(f"{user_str}")
-                print("\r" + user_str, end="", flush=True)
+                print("\r" + colorize_str(user_str, str_color), end="", flush=True)
                 print("\b"*((len(user_str)+1)-curser_pos), end="", flush=True)
                 curser_pos -= 1
                 if curser_pos < 0:
@@ -48,20 +56,20 @@ while True:
         elif user_char == "<arrow-up>":
             print("\b \b"*len(user_str), end="\r", flush=True)
             user_str = cmd_hist.read_backward()
-            print(user_str, end="", flush=True)
+            print(colorize_str(user_str, str_color), end="", flush=True)
             curser_pos = len(user_str)
         # arrow down
         elif user_char == "<arrow-down>":
             print("\b \b"*len(user_str), end="\r", flush=True)
             user_str = cmd_hist.read_forward()
-            print(user_str, end="", flush=True)
+            print(colorize_str(user_str, str_color), end="", flush=True)
             curser_pos = len(user_str)
         # arrow left
         elif user_char == "<arrow-left>":
             curser_pos -= 1
             if curser_pos < 0:
                 curser_pos = 0
-            print("\r" + user_str + ("\b" * (len(user_str)-curser_pos)), end="", flush=True)
+            print("\r" + colorize_str(user_str, str_color) + ("\b" * (len(user_str)-curser_pos)), end="", flush=True)
             logger.debug("<arrow-left>")
             logger.debug(f"{curser_pos=}")
             logger.debug(user_str)
@@ -71,7 +79,7 @@ while True:
             curser_pos += 1
             if curser_pos > len(user_str):
                 curser_pos = len(user_str)
-            print("\r" + user_str + ("\b" * (len(user_str)-curser_pos)), end="", flush=True)
+            print("\r" + colorize_str(user_str, str_color) + ("\b" * (len(user_str)-curser_pos)), end="", flush=True)
             logger.debug("<arrow-right>")
             logger.debug(f"{curser_pos=}")
             logger.debug(user_str)
@@ -83,7 +91,7 @@ while True:
         else:
             user_str = user_str[:curser_pos] + user_char + user_str[curser_pos:]
             print("\b " * len(user_str), end="")
-            print("\r" + user_str, end="", flush=True)
+            print("\r" + colorize_str(user_str, str_color), end="", flush=True)
             print("\b"*((len(user_str)-curser_pos)-1), end="", flush=True)
             if curser_pos == len(user_str)-1:
                 curser_pos = len(user_str)
@@ -92,13 +100,13 @@ while True:
                 if curser_pos > len(user_str):
                     curser_pos = len(user_str)
         user_char = ""
-    """
+    
     if serial.test_inWaiting():
         serial_str = serial.test_readline()
         print("\b \b"*len(user_str), end="\r", flush=True)
-        print(serial_str)
-        print("\r" + user_str, end="", flush=True)
-    """
+        print(serial_str.replace("\r", colorize_str("\\r", "gray")).replace("\n", colorize_str("\\n", "gray")))
+        print("\r" + colorize_str(user_str, str_color), end="", flush=True)
+    
     
     
         

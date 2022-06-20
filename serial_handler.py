@@ -13,7 +13,7 @@ class Serial(serial.Serial):
         super().__init__()
         self.new_line_char = new_line_char
         #------- Test driver -------
-        self.test_data = ["test_data_0", "test_data_1", "test_data_2", "test_data_3", "test_data_4", "test_data_5", "test_data_6", "test_data_7", "test_data_8", "test_data_9"]
+        self.test_data = ["test_data_0\r\n", "test_data_1\r\n", "test_data_2\r\n", "test_data_3\r\n", "test_data_4\r\n", "test_data_5\r\n", "test_data_6\r\n", "test_data_7\r\n", "test_data_8\r\n", "test_data_9\r\n"]
         self.test_ptr = 0
         #---------------------------
 
