@@ -4,6 +4,7 @@ from serial_handler import Serial
 from colored_string import colorize_str
 import os
 from time_stamp import get_time_stamp
+import config
 
 import logging
 logging.basicConfig(filename="curser.log", filemode="w", level=logging.DEBUG, format="[{levelname}] {message}", style="{")
@@ -11,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 cmd_hist = CMD_History(30)
 serial = Serial()
+new_line = ""
+new_line_LUT = {"CR":"\r", "LF":"\n", "CR+LF":"\r\n"}
 user_char = ""
 user_str = ""
 serial_str = ""
@@ -21,6 +24,13 @@ if os.name == "nt":
     os.system("cls")
 else:
     os.system("clear")
+
+
+config.restore_config()
+print("Current config: \n" +config.to_string_current_config())
+
+new_line = new_line_LUT[config.get_new_line()]
+serial.set_new_line_char(new_line)
 
 def delete_char(string, pos):
     return string[:pos] + string[pos+1:]
@@ -48,13 +58,29 @@ while True:
         # enter
         elif user_char == "<enter>":
             print("\b \b"*len(user_str), end="\r", flush=True)
-            print(get_time_stamp() + "\t" + colorize_str(user_str, str_color))
             serial.test_write(user_str)
             cmd_hist.add_item(user_str)
             print("\r",end="", flush=True)
             if user_str == "-q":
+                print(colorize_str(user_str, str_color))
+                print(colorize_str("Exit programm.", "yellow"))
                 exit()
-            curser_pos = 0
+            elif user_str == "-lsconf":
+                print(colorize_str(user_str, str_color))
+                print("Current config:\n" + config.to_string_current_config() + "\n")
+                print("Available configs:\n" + config.to_string_config())
+            elif "-chconf=" in user_str:
+                print(colorize_str(user_str, str_color))
+                try:
+                    config.select_config(user_str[8:])
+                    print(colorize_str(f"Changed config to {user_str[8:]}.", "green"))
+                    new_line = config.get_new_line()
+                    new_line = new_line_LUT[new_line]
+                    serial.set_new_line_char(new_line)
+                except:
+                    print(colorize_str(f"Config {user_str[8:]} not found.", "red"))
+            else:
+                print(get_time_stamp() + "\t" + colorize_str(user_str, str_color) + (colorize_str(new_line.replace("\r", "\\r").replace("\n", "\\n"),"gray")))
             user_str = ""
         # arrow up
         elif user_char == "<arrow-up>":
@@ -105,12 +131,13 @@ while True:
                     curser_pos = len(user_str)
         user_char = ""
     
+    
     if serial.test_inWaiting():
         serial_str = serial.test_readline()
         print("\b \b"*len(user_str), end="\r", flush=True)
         print(get_time_stamp() + "\t" + serial_str.replace("\r", colorize_str("\\r", "gray")).replace("\n", colorize_str("\\n", "gray")))
         print("\r" + colorize_str(user_str, str_color), end="", flush=True)
-    
+
     
     
         

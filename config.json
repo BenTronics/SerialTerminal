@@ -1,0 +1,22 @@
+{
+    "config": [
+        {
+            "name": "template_1",
+            "port": "COM3",
+            "baudrate": 115200,
+            "new_line": "CR"
+        },
+        {
+            "name": "template_2",
+            "port": "COM4",
+            "baudrate": 115200,
+            "new_line": "LF"
+        },
+        {
+            "name": "template_3",
+            "port": "COM4",
+            "baudrate": 115200,
+            "new_line": "CR+LF"
+        }
+    ]
+}
