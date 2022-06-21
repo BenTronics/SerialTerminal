@@ -21,7 +21,19 @@ class Serial(serial.Serial):
         self.new_line_char = char
 
     def write(self, msg):
-        super().write((msg + self.new_line_char).encode("ascii", erros="replace"))
+        if super().isOpen():
+            super().write((msg + self.new_line_char).encode(encoding="ascii", errors="replace"))
+            logger.debug(f"wirte> {msg}")
+    
+    def readline(self):
+        if super().isOpen():
+            return super().readline().decode(encoding="ascii", errors="replace")
+
+    def inWaiting(self):
+        if super().isOpen():
+            return super().inWaiting()
+        else:
+            return False
 
     def list_ports(self):
         ports = []
